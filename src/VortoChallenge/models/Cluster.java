@@ -10,11 +10,11 @@ public class Cluster {
 	static HashMap<String, Float> clusterCostMap; //contains the cost of travel for a particular set of trips (represented as bit integer)
 	static DistanceMatrix dm;
 	
-	Cluster(DistanceMatrix dm) {
+	public static void setup(DistanceMatrix d) {
 		clusterCostMap = new HashMap<>();
-		this.dm = dm;
+		dm = d;
 	}
-	
+
 	public static Float calculateCost(String clusterNumStr) {
 		if(clusterCostMap.containsKey(clusterNumStr)) {
 			return clusterCostMap.get(clusterNumStr);
@@ -31,8 +31,8 @@ public class Cluster {
 					Float minCostItr = Float.MAX_VALUE;
 					int minIndexItr = -1;
 					for(int i=1; i<=clusterStr.length(); i++) {
-						if(i != prevPos && clusterStr.toString().charAt(i) != '0') {
-							Float numCost = dm.distmtx[prevPos][i];
+						if(i != prevPos && clusterStr.toString().charAt(i-1) != '0') {
+							Float numCost = getDm().distmtx[prevPos][i];
 							if(numCost < minCostItr) {
 								minCostItr = numCost;
 								minIndexItr = i;
@@ -40,7 +40,7 @@ public class Cluster {
 						}
 					}
 					cost += minCostItr;
-					clusterStr.setCharAt(minIndexItr,'0');
+					clusterStr.setCharAt(minIndexItr-1,'0');
 					prevPos = minIndexItr;
 				}
 				clusterCostMap.put(clusterNumStr, cost);
@@ -84,11 +84,20 @@ public class Cluster {
 		for(int i=0; i<clusterSize; i++) {
 			clusterCfgRepresentationList.add(new ArrayList<Integer>());
 		}
-		for(int tripIndex=1; tripIndex<=tripPlacementClusterIdx.size(); tripIndex++) {
-			clusterCfgRepresentationList.get(tripPlacementClusterIdx.get(tripIndex)).add(tripIndex);
+		for(int tripIndex=0; tripIndex<tripPlacementClusterIdx.size(); tripIndex++) {
+			Integer tripClusterValueatTripIndex = tripPlacementClusterIdx.get(tripIndex);
+			clusterCfgRepresentationList.get(tripClusterValueatTripIndex-1).add(tripIndex+1);
 		}
 		return clusterCfgRepresentationList;
 		
+	}
+
+	public static DistanceMatrix getDm() {
+		return dm;
+	}
+
+	public static void setDm(DistanceMatrix dm) {
+		Cluster.dm = dm;
 	}
 	
 }

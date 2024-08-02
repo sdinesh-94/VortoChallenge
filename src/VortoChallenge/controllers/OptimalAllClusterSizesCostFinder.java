@@ -33,16 +33,12 @@ public class OptimalAllClusterSizesCostFinder{
 		this.dm = dm;
 		this.trips = trips;
 		this.tripSize = trips.size();
+		clusterConfigCostCalcualtor.setup(tripSize, dm);
 	}
 	
 	ClusterConfigCost calculateSingleClusterCostCfg() {
 		ClusterConfigCost singleClusterCfgCost = new ClusterConfigCost();
-		Float clusterCost = clusterConfigCostCalcualtor.calculateSingleClusterCost();
-		ArrayList<ArrayList<Integer>> clusterCfg = new ArrayList<>();
-		ArrayList<Integer> singleCluster = (ArrayList<Integer>) trips.stream().map(x -> x.getLoadNumber());
-		clusterCfg.add(singleCluster);
-		singleClusterCfgCost.setClusterConfig(clusterCfg);
-		singleClusterCfgCost.setClusterCost(clusterCost);
+		singleClusterCfgCost = clusterConfigCostCalcualtor.calculateSingleClusterCostCfg(trips, tripSize);
 		return singleClusterCfgCost;
 	}
 	
@@ -81,8 +77,8 @@ public class OptimalAllClusterSizesCostFinder{
 					}
 				}
 				
-				while(clusterSize <= tripSize) {
-					ClusterConfigCost kplus1ClusterCostCfg = calculateMultipleClustersLowestCostCfg(clusterSize);
+				while(clusterSize < tripSize) {
+					ClusterConfigCost kplus1ClusterCostCfg = calculateMultipleClustersLowestCostCfg(clusterSize+1);
 					bestkplus1ClusterCfg = kplus1ClusterCostCfg.getClusterConfig();
 					minCostkplus1Cluster = kplus1ClusterCostCfg.getClusterCost();
 					

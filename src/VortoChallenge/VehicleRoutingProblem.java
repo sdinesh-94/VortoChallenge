@@ -74,11 +74,12 @@ public class VehicleRoutingProblem {
 		ClusterConfigCostCalculator kclusterCfgCstCltr= new OptimalKClusterConfigCostCalculator();
 		//at runtime we pass in the cost calculator algorithm
 		optclstr.setupCostFinder(kclusterCfgCstCltr, dm, trips);
-		ArrayList<ArrayList<Integer>> ClusterConfig = optclstr.calculateOptimalCost();
+		ArrayList<ArrayList<Integer>> ClusterConfig = optclstr.calculateOptimalCost();		
 		
-		//output the config info
+		//output the config info. Print only non empty lists
 		for(ArrayList<Integer> cluster: ClusterConfig) {
-			System.out.println(cluster.toString());
+			if(!cluster.isEmpty())
+				System.out.println(cluster.toString());
 		}
 }
 }
