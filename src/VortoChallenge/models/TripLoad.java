@@ -19,6 +19,10 @@ public class TripLoad{
 		this.loadNumber = Integer.valueOf(loadNumber);
 	}
 	
+	public Integer getLoadNumber() {
+		return this.loadNumber;
+	}
+	
 	void setPoint(Point pt, String pointInput) {
 		if(pointInput != null) {
 			pointInput = pointInput.replace("(", "").replace(")", "");

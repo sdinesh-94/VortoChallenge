@@ -16,7 +16,7 @@ import VortoChallenge.controllers.OptimalKClusterConfigCostCalculator;
 public class VehicleRoutingProblem {
 	
 	static ArrayList<TripLoad> trips;
-	DistanceMatrix dm = new DistanceMatrix();
+	static DistanceMatrix dm = new DistanceMatrix();
 	static int tripSize = 0;
 	
 	
@@ -73,8 +73,12 @@ public class VehicleRoutingProblem {
 
 		ClusterConfigCostCalculator kclusterCfgCstCltr= new OptimalKClusterConfigCostCalculator();
 		//at runtime we pass in the cost calculator algorithm
-		optclstr.setupCostFinder(kclustrCfgCstCltr, dm, trips);
+		optclstr.setupCostFinder(kclusterCfgCstCltr, dm, trips);
+		ArrayList<ArrayList<Integer>> ClusterConfig = optclstr.calculateOptimalCost();
 		
-		
+		//output the config info
+		for(ArrayList<Integer> cluster: ClusterConfig) {
+			System.out.println(cluster.toString());
+		}
 }
 }

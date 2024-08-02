@@ -9,16 +9,16 @@ import VortoChallenge.util.TimeChecker;
 
 public class OptimalAllClusterSizesCostFinder{
 	
-	ArrayList<ArrayList<TripLoad>> bestAllClusterCfg; //optimal cluster setup lowest cost config
+	ArrayList<ArrayList<Integer>> bestAllClusterCfg; //optimal cluster setup lowest cost config
 	Float minCostAllClusters = Float.MAX_VALUE;  // minimum cost across all clusters
 	
-	ArrayList<ArrayList<TripLoad>> bestkminus1ClusterCfg; //k-1 cluster setup lowest cost config
+	ArrayList<ArrayList<Integer>> bestkminus1ClusterCfg; //k-1 cluster setup lowest cost config
 	Float minCostkminus1Cluster;  // minimum cost across k-1 cluster
 	
-	ArrayList<ArrayList<TripLoad>> bestkClusterCfg; //k cluster setup lowest cost config
+	ArrayList<ArrayList<Integer>> bestkClusterCfg; //k cluster setup lowest cost config
 	Float minCostkCluster;  // minimum cost across k cluster
 	
-	ArrayList<ArrayList<TripLoad>> bestkplus1ClusterCfg; //k+1 cluster setup lowest cost config
+	ArrayList<ArrayList<Integer>> bestkplus1ClusterCfg; //k+1 cluster setup lowest cost config
 	Float minCostkplus1Cluster;  // minimum cost across k+1 cluster
 	
 	
@@ -38,8 +38,9 @@ public class OptimalAllClusterSizesCostFinder{
 	ClusterConfigCost calculateSingleClusterCostCfg() {
 		ClusterConfigCost singleClusterCfgCost = new ClusterConfigCost();
 		Float clusterCost = clusterConfigCostCalcualtor.calculateSingleClusterCost();
-		ArrayList<ArrayList<TripLoad>> clusterCfg = new ArrayList<>();
-		clusterCfg.add(trips);
+		ArrayList<ArrayList<Integer>> clusterCfg = new ArrayList<>();
+		ArrayList<Integer> singleCluster = (ArrayList<Integer>) trips.stream().map(x -> x.getLoadNumber());
+		clusterCfg.add(singleCluster);
 		singleClusterCfgCost.setClusterConfig(clusterCfg);
 		singleClusterCfgCost.setClusterCost(clusterCost);
 		return singleClusterCfgCost;
@@ -47,13 +48,12 @@ public class OptimalAllClusterSizesCostFinder{
 	
 	ClusterConfigCost calculateMultipleClustersLowestCostCfg(int clusterSize) {
 		ClusterConfigCost multipleClusterCfgCost = new ClusterConfigCost();
-		Float clusterCost = clusterConfigCostCalcualtor.calculateMultipleClusterCostCfg(trips, tripSize, clusterSize);
+		multipleClusterCfgCost = clusterConfigCostCalcualtor.calculateMultipleClusterCostCfg(trips, tripSize, clusterSize);
+		return multipleClusterCfgCost;
 	}
 	
 	
-
-	
-	public void calculateOptimalCost() {
+	public ArrayList<ArrayList<Integer>> calculateOptimalCost() {
 		
 		bestAllClusterCfg = new ArrayList<>();
 		ClusterConfigCost singleClusterCostCfg = calculateSingleClusterCostCfg();
@@ -61,7 +61,7 @@ public class OptimalAllClusterSizesCostFinder{
 		if(tripSize == 1) {
 			if(!TimeChecker.checkTimeExceedCondition(singleClusterCostCfg.getClusterCost())) {
 				bestAllClusterCfg = singleClusterCostCfg.getClusterConfig();
-				return;
+				return bestAllClusterCfg;
 			}
 		}
 		
@@ -77,7 +77,7 @@ public class OptimalAllClusterSizesCostFinder{
 					minCostAllClusters = Math.min(minCostkCluster, minCostkminus1Cluster);
 					if(!TimeChecker.checkTimeExceedCondition(minCostAllClusters)) {
 						bestAllClusterCfg = minCostkCluster < minCostkminus1Cluster ? bestkClusterCfg : bestkminus1ClusterCfg;
-						return;
+						return bestAllClusterCfg;
 					}
 				}
 				
@@ -90,7 +90,7 @@ public class OptimalAllClusterSizesCostFinder{
 						minCostAllClusters = minCostkCluster;
 						if(!TimeChecker.checkTimeExceedCondition(minCostAllClusters)) {
 							bestAllClusterCfg =  bestkClusterCfg;
-							return;
+							return bestAllClusterCfg;
 						}
 					}
 					else {
@@ -106,8 +106,9 @@ public class OptimalAllClusterSizesCostFinder{
 				minCostAllClusters = minCostkplus1Cluster;
 				if(!TimeChecker.checkTimeExceedCondition(minCostAllClusters)) {
 					bestAllClusterCfg =  bestkplus1ClusterCfg;
-					return;
+					return bestAllClusterCfg;
 				}
+				return bestAllClusterCfg;
 	
 	}
 	

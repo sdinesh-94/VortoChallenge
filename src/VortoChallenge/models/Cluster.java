@@ -7,15 +7,15 @@ import java.util.HashMap;
 
 public class Cluster {
 	
-	HashMap<String, Float> clusterCostMap; //contains the cost of travel for a particular set of trips (represented as bit integer)
-	DistanceMatrix dm;
+	static HashMap<String, Float> clusterCostMap; //contains the cost of travel for a particular set of trips (represented as bit integer)
+	static DistanceMatrix dm;
 	
 	Cluster(DistanceMatrix dm) {
 		clusterCostMap = new HashMap<>();
 		this.dm = dm;
 	}
 	
-	Float calculateCost(String clusterNumStr) {
+	public static Float calculateCost(String clusterNumStr) {
 		if(clusterCostMap.containsKey(clusterNumStr)) {
 			return clusterCostMap.get(clusterNumStr);
 		}
@@ -55,10 +55,40 @@ public class Cluster {
 		return null;
 		
 	}
-
-	public static ArrayList<ArrayList<Integer>> getClusterRepresentation(ArrayList<Integer> tripPlacementClusterIdx) {
-		// TODO Auto-generated method stub
-		return null;
+    /*
+     * we get a string representation of k bit strings where k is the number of the cluster. Each cluster string has the 
+     * value set to 1 at the position of the trip character
+     * 
+     */
+	public static ArrayList<String> getClusterStringRepresentation(ArrayList<Integer> tripPlacementClusterIdx, int clusterSize) {
+		
+		ArrayList<String> clusterStringList = new ArrayList<>();
+		for(int index=1; index<=clusterSize; index++) {
+			StringBuilder str = new StringBuilder();
+			for(int itr=0; itr<tripPlacementClusterIdx.size(); itr++) {
+				if(tripPlacementClusterIdx.get(itr) == index) {
+					str.append("1");
+				}
+				else {
+					str.append("0");
+				}
+			}
+			clusterStringList.add(str.toString());
+		}
+		return clusterStringList;
+	}
+	
+	public static ArrayList<ArrayList<Integer>> getClusterCfgRepresentation(ArrayList<Integer> tripPlacementClusterIdx, int clusterSize){
+		
+		ArrayList<ArrayList<Integer>> clusterCfgRepresentationList = new ArrayList<>();
+		for(int i=0; i<clusterSize; i++) {
+			clusterCfgRepresentationList.add(new ArrayList<Integer>());
+		}
+		for(int tripIndex=1; tripIndex<=tripPlacementClusterIdx.size(); tripIndex++) {
+			clusterCfgRepresentationList.get(tripPlacementClusterIdx.get(tripIndex)).add(tripIndex);
+		}
+		return clusterCfgRepresentationList;
+		
 	}
 	
 }

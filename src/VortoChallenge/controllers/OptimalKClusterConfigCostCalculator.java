@@ -14,7 +14,7 @@ public class OptimalKClusterConfigCostCalculator extends ClusterConfigCostCalcul
 
 	
 	
-	public static ClusterConfigCost calculateMultipleClusterCostCfg(ArrayList<TripLoad> trips, int tripSize, int clusterSize){	
+	public ClusterConfigCost calculateMultipleClusterCostCfg(ArrayList<TripLoad> trips, int tripSize, int clusterSize){	
 		
 		ArrayList<ArrayList<Integer>> alltripPlacementClusterIdx = new ArrayList<>();
 		alltripPlacementClusterIdx = generatePlacementListRecFun(tripSize, 1, clusterSize);
@@ -27,10 +27,14 @@ public class OptimalKClusterConfigCostCalculator extends ClusterConfigCostCalcul
 		Float minClusterCost = Float.MAX_VALUE;
 		ArrayList<ArrayList<Integer>> minClusterCfg = new ArrayList<>();
 		for(ArrayList<Integer> tripPlacementClusterIdx: alltripPlacementClusterIdx) {
-			Float currentClusterCost = CostCalculator.clusterCost(tripPlacementClusterIdx);
+			
+			ArrayList<String> clusterStringList = Cluster.getClusterStringRepresentation(tripPlacementClusterIdx, clusterSize);
+			
+			Float currentClusterCost = CostCalculator.clusterCost(clusterStringList);
 			if(currentClusterCost < minClusterCost) {
 				minClusterCost = currentClusterCost;
-				minClusterCfg = Cluster.getClusterRepresentation(tripPlacementClusterIdx);
+				
+				minClusterCfg = Cluster.getClusterCfgRepresentation(tripPlacementClusterIdx, clusterSize);
 			}
 		}
 		ClusterConfigCost minClusterfork = new ClusterConfigCost();
@@ -69,7 +73,6 @@ public class OptimalKClusterConfigCostCalculator extends ClusterConfigCostCalcul
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 
 
 }

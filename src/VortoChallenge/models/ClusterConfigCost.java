@@ -4,13 +4,13 @@ import java.util.ArrayList;
 
 public class ClusterConfigCost {
 	
-	ArrayList<ArrayList<TripLoad>> clusterConfig;
+	ArrayList<ArrayList<Integer>> clusterConfig;
 	Float clusterCost;
 
-	public ArrayList<ArrayList<TripLoad>> getClusterConfig() {
+	public ArrayList<ArrayList<Integer>> getClusterConfig() {
 		return clusterConfig;
 	}
-	public void setClusterConfig(ArrayList<ArrayList<TripLoad>> clusterConfig) {
+	public void setClusterConfig(ArrayList<ArrayList<Integer>> clusterConfig) {
 		this.clusterConfig = clusterConfig;
 	}
 	public Float getClusterCost() {
