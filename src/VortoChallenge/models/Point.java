@@ -4,5 +4,5 @@ public class Point {
 
 	Float x;
 	Float y;
-	
+
 }
