@@ -6,7 +6,7 @@ Since this is NP-Hard problem where there does not exists yet a perfect solution
 
 go to src folder
 
-```cd VortChallenge/src```
+```cd VortoChallenge/src```
 
 To compile
 
